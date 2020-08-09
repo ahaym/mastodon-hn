@@ -1,0 +1,57 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           mastodon-hn
+version:        0.1.0.0
+description:    Hacker news mastodon bot.
+homepage:       https://github.com/githubuser/mastodon-hn#readme
+bug-reports:    https://github.com/githubuser/mastodon-hn/issues
+author:         Mark Hay
+maintainer:     mark@haym.me
+copyright:      2020 Mark Hay
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/mastodon-hn
+
+library
+  other-modules:
+      Paths_mastodon_hn
+  hs-source-dirs:
+      ./.
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , containers
+    , random
+    , req
+    , text
+    , transformers
+  default-language: Haskell2010
+
+executable mastodon-hn-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_mastodon_hn
+  hs-source-dirs:
+      app
+  ghc-options: -rtsopts
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , containers
+    , mastodon-hn
+    , random
+    , req
+    , text
+    , transformers
+  default-language: Haskell2010

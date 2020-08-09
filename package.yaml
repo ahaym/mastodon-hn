@@ -1,0 +1,41 @@
+name:                mastodon-hn
+version:             0.1.0.0
+github:              "githubuser/mastodon-hn"
+license:             BSD3
+author:              "Mark Hay"
+maintainer:          "mark@haym.me"
+copyright:           "2020 Mark Hay"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Hacker news mastodon bot
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:        Hacker news mastodon bot. 
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- containers
+- random
+- req
+- text
+- transformers
+
+library:
+  source-dirs: .
+
+executables:
+  mastodon-hn-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -rtsopts
+    dependencies:
+    - mastodon-hn
