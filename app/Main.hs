@@ -22,7 +22,7 @@ import System.Random
 numConsidered, numTaken, maxSize, interval :: Int
 numConsidered = 50
 numTaken = 2
-maxSize = numTaken*1000
+maxSize = numTaken * 100
 interval = 1000000 * 7200
 
 hnApi :: Url Https

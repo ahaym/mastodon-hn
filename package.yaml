@@ -1,6 +1,6 @@
 name:                mastodon-hn
 version:             0.1.0.0
-github:              "githubuser/mastodon-hn"
+github:              "ahaym/mastodon-hn"
 license:             BSD3
 author:              "Mark Hay"
 maintainer:          "mark@haym.me"
