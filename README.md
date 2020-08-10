@@ -4,7 +4,7 @@ Toots two HN posts every two hours.
 
 The two posts are:
 1. The highest ranked post not tooted yet
-2. One random post from the top 50, score-weighted.
+2. One random post from the top 50 not tooted yet, score-weighted.
 
 Takes two lines from `stdin` on startup. The first is the instance name (i.e. `botsin.space`), the second is the application token.
 

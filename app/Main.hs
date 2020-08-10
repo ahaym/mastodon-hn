@@ -92,9 +92,12 @@ weightedSelect hns = do
 
 getTopPosts :: M [Hn]
 getTopPosts = do
+    env <- ask
+    s <- liftIO $ readIORef (alreadyPosted env)
     ids <- runReq defaultHttpConfig $
         req GET (hnApi /: "topstories.json") NoReqBody jsonResponse mempty
-    fmap catMaybes . mapM getHnById . take numConsidered $ responseBody ids
+    fmap catMaybes . mapM getHnById . take numConsidered 
+        . filter (not . flip S.member s) $ responseBody ids
 
 getHnById :: Int -> M (Maybe Hn)
 getHnById pid = liftIO . handle handler . runReq defaultHttpConfig $ do
@@ -107,11 +110,9 @@ getHnById pid = liftIO . handle handler . runReq defaultHttpConfig $ do
     handler e = return Nothing
 
 takeBest :: [Hn] -> M Hn
-takeBest posts = do
-    env <- ask
-    s <- liftIO $ readIORef (alreadyPosted env)
-    let best'm = listToMaybe $ dropWhile (flip S.member s . postId) posts
-    case best'm of
+takeBest posts =
+    let best'm = listToMaybe posts
+    in case best'm of
         Just best -> evictInsert best >> return best
         Nothing -> liftIO $ throwIO $ ErrorCall $
             "takeBest failed: " ++
