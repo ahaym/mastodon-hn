@@ -73,8 +73,16 @@ toStatus hn = T.unlines
     , "Submitted by: " <> author hn <> "; Score: " <> (T.pack . show $ score hn)
     ]
 
+filterAlreadyPosted :: [Hn] -> M [Hn]
+filterAlreadyPosted hns = do
+    env <- ask
+    s <- liftIO $ readIORef (alreadyPosted env)
+    return $ filter (not . flip S.member s . postId) hns
+
 weightedSelect :: [Hn] -> M Hn
-weightedSelect hns = do
+weightedSelect hns_ = do
+    hns <- filterAlreadyPosted hns_
+    let total = sum $ map score hns
     acc0 <- liftIO $ randomRIO (0, total - 1)
     let sel = foldr go (Right acc0) hns
     case sel of
@@ -83,8 +91,6 @@ weightedSelect hns = do
             "weightedSelect failed: " ++
             "most likely no posts were passed or the total score was 0"
     where
-    total = sum $ map score hns
-
     go hn (Left item) = Left item
     go hn (Right acc) = if acc < score hn
         then Left hn
@@ -110,8 +116,8 @@ getHnById pid = liftIO . handle handler . runReq defaultHttpConfig $ do
     handler e = return Nothing
 
 takeBest :: [Hn] -> M Hn
-takeBest posts =
-    let best'm = listToMaybe posts
+takeBest hns_ = filterAlreadyPosted hns_ >>= \hns ->
+    let best'm = listToMaybe hns
     in case best'm of
         Just best -> evictInsert best >> return best
         Nothing -> liftIO $ throwIO $ ErrorCall $
